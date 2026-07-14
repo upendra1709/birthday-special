@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Happy Birthday ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Poppins:wght@300;400;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- PASSWORD SCREEN -->
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-container">
+            <div class="lock-emoji">🔐</div>
+            <h2 class="password-title">Enter Your Birthday</h2>
+            <p class="password-subtitle">to unlock this surprise!</p>
+            
+            <div class="password-hint">
+                💡 Hint: vo kya hota h
+            </div>
+
+            <div class="date-inputs">
+                <div class="date-input-group">
+                    <label for="day">Day</label>
+                    <input type="number" id="day" placeholder="DD" min="1" max="31" maxlength="2">
+                </div>
+                <div class="date-input-group">
+                    <label for="month">Month</label>
+                    <input type="number" id="month" placeholder="MM" min="1" max="12" maxlength="2">
+                </div>
+                <div class="date-input-group">
+                    <label for="year">Year</label>
+                    <input type="number" id="year" placeholder="YYYY" min="1900" max="2025" maxlength="4">
+                </div>
+            </div>
+
+            <button class="unlock-btn" onclick="checkPassword()">🎉 Unlock Birthday Surprise 🎉</button>
+            
+            <div class="error-message" id="errorMessage">
+                💭 Hmm, that's not quite it - give it another try!
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN WEBSITE -->
+    <!-- EDIT ME: replace "background-music.mp3" with the path to a song that means something to you both -->
+    <audio id="bgMusic" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+    <button class="music-btn" onclick="toggleMusic()" id="musicBtn" style="display:none;">🎵</button>
+    <div class="page-indicator" id="pageIndicator" style="display:none;"><span id="page-number">1</span> / <span id="page-total">10</span></div>
+
+    <div class="container" id="mainContainer" style="display:none;">
+        <!-- PAGE 1: LOADING -->
+        <div class="page loading-page" id="page0">
+            <div class="loading-emoji">🎉</div>
+            <div class="loading-text">Preparing Your Surprise</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
+
+        <!-- PAGE 2: WELCOME -->
+        <div class="page welcome-page hidden" id="page1">
+            <h1 class="welcome-name">Diksha</h1>
+            <p class="welcome-text">I have a surprise for you ❤️</p>
+            <p class="welcome-text">This is specially created just for you</p>
+            <div class="welcome-emoji">🎂 🎈 🎉</div>
+        </div>
+
+        <!-- PAGE 2.5: FRIENDSHIP COUNTER -->
+        <div class="page counter-page hidden" id="pageCounter">
+            <h2 class="title">Since We Became Friends 💫</h2>
+            <div class="counter-box">
+                <div class="counter-grid">
+                    <div class="counter-item">
+                        <div class="counter-number" id="countYears">0</div>
+                        <div class="counter-label">Years</div>
+                    </div>
+                    <div class="counter-item">
+                        <div class="counter-number" id="countMonths">0</div>
+                        <div class="counter-label">Months</div>
+                    </div>
+                    <div class="counter-item">
+                        <div class="counter-number" id="countDays">0</div>
+                        <div class="counter-label">Days</div>
+                    </div>
+                    <div class="counter-item">
+                        <div class="counter-number" id="countTotalDays">0</div>
+                        <div class="counter-label">Total Days</div>
+                    </div>
+                </div>
+                <p class="counter-subtext">That's how long you've been making my life better, one day at a time. Here's to many, many more 💕</p>
+            </div>
+        </div>
+
+        <!-- PAGE 3: CAKE -->
+        <div class="page cake-page hidden" id="page2">
+            <h2 class="cake-title">🎂 Make a wish & blow the candles 🕯️</h2>
+            <div class="cake-container">
+                <!-- EDIT ME: replace "wish-photo.jpg" with a real photo of her (or of you two together) -->
+                <div class="cake" style="background-image: url('wish-photo.jpg'); background-size: cover; background-position: center; width: 320px; height: 320px; max-width: 90vw;"></div>
+            </div>
+            <div class="candles-container">
+                <div class="candle" onclick="blowCandle(0)">🕯️</div>
+                <div class="candle" onclick="blowCandle(1)">🕯️</div>
+                <div class="candle" onclick="blowCandle(2)">🕯️</div>
+                <div class="candle" onclick="blowCandle(3)">🕯️</div>
+                <div class="candle" onclick="blowCandle(4)">🕯️</div>
+            </div>
+            <div id="cake-message" style="display:none;">
+                <h2 style="color: #FF69B4; font-size: 2rem;">Yay! Happy Birthday! 🎉</h2>
+                <p style="color: #666; font-size: 1.1rem;">Your wish is on its way...✨</p>
+            </div>
+        </div>
+
+        <!-- PAGE 3.5: FUNNY VIDEO -->
+        <div class="page video-page hidden" id="pageFunnyVideo">
+            <h2 class="title">A Little Something To Make You Laugh 😂</h2>
+            <div class="video-box">
+                <!-- EDIT ME: replace "funny-video.mp4" with the path to your funny video clip -->
+                <video controls>
+                    <source src="funny-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+            </div>
+        </div>
+
+        <!-- PAGE 4: ENVELOPE -->
+        <div class="page envelope-page hidden" id="page3">
+            <h2 class="title">Open the envelope 💌</h2>
+            <div class="envelope-container">
+                <div class="envelope" id="envelope" onclick="openEnvelope()">💌</div>
+            </div>
+            <div id="envelope-message" style="display:none; color: #FF69B4; font-weight: 600; font-size: 1.1rem;">
+                ✨ Special Letter Inside ✨<br>Click continue to read it
+            </div>
+        </div>
+
+        <!-- PAGE 5: LETTER -->
+        <div class="page letter-page hidden" id="page4">
+            <h2 class="title">Your Special Letter ❤️</h2>
+            <!-- EDIT ME: rewrite this letter with a real memory, an inside joke, or something you've
+                 always meant to tell her. Specific beats generic every time. -->
+            <div class="letter">
+                <div class="letter-text">
+                    <p><strong>Dear Diksha,</strong></p>
+                    <p>Today is a celebration of YOU - the most amazing person I know.</p>
+                    <p>Over the time we've known each other, you've brought so much joy, laughter, and brightness into my life. Your kindness, your infectious smile, and your incredible spirit make every moment special.</p>
+                    <p>You deserve all the happiness in the world. I hope this birthday brings you as much joy as you bring to everyone around you.</p>
+                    <p>Thank you for being exactly who you are. Keep shining, keep smiling, and keep being wonderful.</p>
+                    <p><strong>With all my love and best wishes,</strong></p>
+                    <p><strong>Your Upendra ❤️</strong></p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- PAGE 6: PHOTOS -->
+        <div class="page photos-page hidden" id="page5">
+            <h2 class="title">Our Beautiful Memories 📸</h2>
+            <div class="photo-box">
+                <div class="photo-display">
+                    <img id="photo-img" src="https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500&h=500&fit=crop" alt="Photo">
+                </div>
+                <p class="photo-caption" id="photo-caption">Smile more, worry less 😊</p>
+                <div class="photo-nav">
+                    <button onclick="previousPhoto()">← Previous</button>
+                    <button onclick="nextPhoto()">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 7: REASONS -->
+        <div class="page reasons-page hidden" id="page6">
+            <h2 class="title">Reasons Why You're Special 💖</h2>
+            <!-- EDIT ME: swap these for real, specific reasons - things she's actually done, not generic traits -->
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <div class="reason-number">01</div>
+                    <div class="reason-title">Your Smile</div>
+                    <p>It lights up any room 😊</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-number">02</div>
+                    <div class="reason-title">Your Kindness</div>
+                    <p>You have a heart of gold ❤️</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-number">03</div>
+                    <div class="reason-title">Your Laugh</div>
+                    <p>It's contagious 😄</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-number">04</div>
+                    <div class="reason-title">Your Strength</div>
+                    <p>You inspire us 💪</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-number">05</div>
+                    <div class="reason-title">Your Creativity</div>
+                    <p>You make it colorful ✨</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-number">06</div>
+                    <div class="reason-title">Your Friendship</div>
+                    <p>It's a blessing 💕</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 8: TIMELINE -->
+        <div class="page timeline-page hidden" id="page7">
+            <h2 class="title">Our Journey Together 💫</h2>
+            <!-- EDIT ME: swap the text under each date for a real specific moment from your friendship -->
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">4th March 2024</div>
+                    <div class="timeline-text">The Beginning - The day our friendship started ✨</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2024</div>
+                    <div class="timeline-text">Making Memories - Getting to know each other, laughing together 😄</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">March 2025</div>
+                    <div class="timeline-text">One Year In - Still going strong, supporting each other 💪</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2026</div>
+                    <div class="timeline-text">Deepening Bond - An even stronger connection ❤️</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">Today</div>
+                    <div class="timeline-text">Celebrating You - Your special day 🎉</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 8.5: QUIZ -->
+        <div class="page quiz-page hidden" id="pageQuiz">
+            <h2 class="title">How Well Do You Know Us? 🧠💕</h2>
+            <div class="quiz-box">
+                <div class="quiz-progress" id="quizProgress">Question 1 of 3</div>
+                <div class="quiz-question" id="quizQuestion">Loading question...</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+            </div>
+            <div class="quiz-box quiz-final" id="quizFinal">
+                <h2 style="color:#FF69B4; margin-bottom:0.5rem;">You know us so well! 🎉</h2>
+                <p style="color:#666;">Score: <span id="quizScore">0</span>/3</p>
+            </div>
+        </div>
+
+        <!-- PAGE 9: WISHES -->
+        <div class="page wishes-page hidden" id="page8">
+            <h2 class="title">Birthday Wishes for You 🌟</h2>
+            <div class="wishes-list">
+                <div class="wish-item"><p>May you always find reasons to smile 😊</p></div>
+                <div class="wish-item"><p>May your days be filled with love and laughter 💕</p></div>
+                <div class="wish-item"><p>May you achieve all your dreams ✨</p></div>
+                <div class="wish-item"><p>May you stay surrounded by wonderful people 👥</p></div>
+                <div class="wish-item"><p>May you always shine bright like a star ⭐</p></div>
+                <div class="wish-item"><p>May you love yourself as much as we love you 💖</p></div>
+            </div>
+        </div>
+
+        <!-- PAGE 9.5: SWEET VIDEO -->
+        <div class="page video-page hidden" id="pageSweetVideo">
+            <h2 class="title">One Last Thing, From My Heart 🥹💕</h2>
+            <div class="video-box">
+                <!-- EDIT ME: replace "sweet-video.mp4" with the path to your heartfelt video message -->
+                <video controls>
+                    <source src="sweet-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+            </div>
+        </div>
+
+        <!-- PAGE 10: FINAL -->
+        <div class="page final-page hidden" id="page9">
+            <h1 class="final-title">Happy Birthday</h1>
+            <h2 class="final-subtitle">Diksha</h2>
+            <p class="final-message">You are absolutely amazing! ❤️</p>
+            <p class="final-message">Thank you for being the incredible person you are. Your presence makes the world brighter. Here's to celebrating YOU on your special day!</p>
+            <div class="final-emojis">🎂 🎈 💝 🎊 ✨</div>
+            <button onclick="celebrate()" style="margin-top: 1rem;">🎉 Celebrate! 🎉</button>
+        </div>
+    </div>
+
+    <div class="nav-buttons" id="navButtons" style="display:none;">
+        <button onclick="previousPage()" id="prev-btn" style="display:none;">← Previous</button>
+        <button onclick="nextPage()" id="next-btn">Next →</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
