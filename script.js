@@ -1,6 +1,6 @@
         // ===== PASSWORD SECTION =====
         // Her date of birth, format DD/MM/YYYY
-        const correctPassword = '15/07/2006';
+        const correctPassword = '22/10/2008';
 
         function checkPassword() {
             const day = document.getElementById('day').value.padStart(2, '0');
@@ -156,51 +156,91 @@
             }
         }
 
-        // ===== FRIENDSHIP COUNTER =====
-        // Date you two became friends (04/03/2024)
-        const friendshipStartDate = '2024-03-04';
+// ===== LOVE COUNTER ❤️ =====
+// Date your love story began (YYYY-MM-DD)
+const loveStartDate = '2026-09-08';
 
-        function updateFriendshipCounter() {
-            const start = new Date(friendshipStartDate);
-            const now = new Date();
-            let years = now.getFullYear() - start.getFullYear();
-            let months = now.getMonth() - start.getMonth();
-            let days = now.getDate() - start.getDate();
+function updateLoveCounter() {
+    const start = new Date(loveStartDate + 'T00:00:00');
+    const now = new Date();
 
-            if (days < 0) {
-                months--;
-                const lastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                days += lastMonth.getDate();
-            }
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
+    // Calculate years, months, and days
+    let years = now.getFullYear() - start.getFullYear();
+    let months = now.getMonth() - start.getMonth();
+    let days = now.getDate() - start.getDate();
 
-            const totalDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+    if (days < 0) {
+        months--;
 
-            document.getElementById('countYears').textContent = years;
-            document.getElementById('countMonths').textContent = months;
-            document.getElementById('countDays').textContent = days;
-            document.getElementById('countTotalDays').textContent = totalDays;
-        }
+        const lastMonth = new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            0
+        );
+
+        days += lastMonth.getDate();
+    }
+
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+
+    // Calculate total days together
+    const totalDays = Math.max(
+        0,
+        Math.floor(
+            (new Date(now.getFullYear(), now.getMonth(), now.getDate()) -
+             start) / (1000 * 60 * 60 * 24)
+        )
+    );
+
+    // Update the HTML counter
+    document.getElementById('countYears').textContent =
+        Math.max(0, years);
+
+    document.getElementById('countMonths').textContent =
+        Math.max(0, months);
+
+    document.getElementById('countDays').textContent =
+        Math.max(0, days);
+
+    document.getElementById('countTotalDays').textContent =
+        totalDays;
+}
+
+// Update the counter immediately
+updateLoveCounter();
+
+// Refresh the counter every minute
+setInterval(updateLoveCounter, 60000);
 
         // ===== MEMORY QUIZ =====
         // EDIT ME: replace these with real questions only she would know the answer to!
         const quizQuestions = [
             {
                 question: "Where did we first meet?",
-                options: ["School", "Through friends", "Online", "Work"],
-                correct: 1
+                options: ["School", "Through friends", "Online", "Game"],
+                correct: 3
             },
             {
                 question: "What's our favorite thing to do together?",
-                options: ["Watch movies", "Long calls", "Travel", "Bitching"],
+                options: ["Watch movies", "Long calls", "Travel", "Meri gand marna"],
                 correct: 3
             },
             {
                 question: "What do I always tease you about?",
-                options: ["Being late", "Your laugh",  "Your playlist", "Flat chest"],
+                options: ["Being late", "Your laugh",  "Your playlist", "Your height"],
+                correct: 3
+            },
+            {
+                question: "Who falls asleep first while VideoCall?",
+                options: ["Me", "You",  "Both of us", "We never stop talking"],
+                correct: 0
+            },
+                {
+                question: "One last question, Gayuu… how special am I to you?",
+                options: ["A little special", "Very special",  "More than I can explain", "You already know, silly!"],
                 correct: 3
             }
         ];
