@@ -1,93 +1,102 @@
+
         // ===== PASSWORD SECTION =====
-        // Her date of birth, format DD/MM/YYYY
         const correctPassword = '22/10/2008';
 
         function checkPassword() {
             const day = document.getElementById('day').value.padStart(2, '0');
             const month = document.getElementById('month').value.padStart(2, '0');
             const year = document.getElementById('year').value;
-
             const enteredPassword = day + '/' + month + '/' + year;
 
             if (enteredPassword === correctPassword) {
-                // Correct password!
                 createConfetti();
                 document.getElementById('passwordScreen').classList.add('hidden');
                 document.getElementById('mainContainer').style.display = 'block';
                 document.getElementById('musicBtn').style.display = 'block';
                 document.getElementById('pageIndicator').style.display = 'block';
                 document.getElementById('navButtons').style.display = 'flex';
-                updateFriendshipCounter();
-                
-                // Auto load to page 1 after 2.5 seconds
-                setTimeout(() => {
-                    goToPage(1);
-                }, 2500);
+
+                // Fixed: use the correct love-counter function name
+                updateLoveCounter();
+
+                setTimeout(() => goToPage(1), 2500);
             } else {
-                // Wrong password
                 const errorMsg = document.getElementById('errorMessage');
                 errorMsg.classList.add('show');
-                setTimeout(() => {
-                    errorMsg.classList.remove('show');
-                }, 3000);
-                
-                // Clear inputs
+
+                setTimeout(() => errorMsg.classList.remove('show'), 3000);
+
                 document.getElementById('day').value = '';
                 document.getElementById('month').value = '';
                 document.getElementById('year').value = '';
             }
         }
 
-        // Allow Enter key to submit password
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('year').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            const yearInput = document.getElementById('year');
+            if (yearInput) {
+                yearInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') checkPassword();
+                });
+            }
         });
 
-        // ===== WEBSITE SECTION =====
+        // ===== WEBSITE NAVIGATION =====
         let currentPage = 0;
         let blownCandlesCount = 0;
         let photosIndex = 0;
         let isMusicPlaying = false;
 
         const pages = document.querySelectorAll('.page');
-        // EDIT ME: replace each url with a real photo of you two (e.g. 'photos/photo1.jpg')
-        // and rewrite each caption to say something true and specific about that memory
-        const photos = [
-            { url: 'photo1.jpg', caption: 'Smile more, worry less 😊' },
-            { url: 'photo2.jpg', caption: 'You\'re a sunflower 🌻' },
-            { url: 'photo3.jpg', caption: 'Keep shining ✨' },
-            { url: 'photo4.jpg', caption: 'Be yourself ❤️' },
-            { url: 'photo5.jpg', caption: 'You are beautiful 💕' },
-            { url: 'photo6.jpg', caption: 'My favorite memory with you 📸' },
-            { url: 'photo7.jpg', caption: 'That day we couldn\'t stop laughing 😂' },
-            { url: 'photo8.jpg', caption: 'Always by my side 🤍' },
-            { url: 'photo9.jpg', caption: 'This one just feels like home 🏡' },
-            { url: 'photo10.jpg', caption: 'Here\'s to many more like this 🥂' }
-        ];
 
         function goToPage(pageNum) {
-            pages.forEach(p => p.classList.add('hidden'));
-            pages[pageNum].classList.remove('hidden');
-            currentPage = pageNum;
-            
-            document.getElementById('page-number').textContent = pageNum + 1;
-            document.getElementById('page-total').textContent = pages.length;
-            document.getElementById('prev-btn').style.display = currentPage === 0 ? 'none' : 'block';
-            document.getElementById('next-btn').style.display = currentPage === pages.length - 1 ? 'none' : 'block';
+            if (
+                !Number.isInteger(pageNum) ||
+                pageNum < 0 ||
+                pageNum >= pages.length
+            ) {
+                console.error('Invalid page index:', pageNum);
+                return;
+            }
 
-            if (pages[pageNum].id === 'pageQuiz') {
+            pages.forEach(page => page.classList.add('hidden'));
+
+            const activePage = pages[pageNum];
+            activePage.classList.remove('hidden');
+            currentPage = pageNum;
+
+            const pageNumber = document.getElementById('page-number');
+            const pageTotal = document.getElementById('page-total');
+            const prevButton = document.getElementById('prev-btn');
+            const nextButton = document.getElementById('next-btn');
+
+            if (pageNumber) pageNumber.textContent = pageNum + 1;
+            if (pageTotal) pageTotal.textContent = pages.length;
+            if (prevButton) {
+                prevButton.style.display = currentPage === 0 ? 'none' : 'block';
+            }
+            if (nextButton) {
+                nextButton.style.display =
+                    currentPage === pages.length - 1 ? 'none' : 'block';
+            }
+
+            if (activePage.id === 'pageCounter') {
+                updateLoveCounter();
+            }
+
+            if (activePage.id === 'pageQuiz') {
                 quizIndex = 0;
                 quizScore = 0;
+
                 document.querySelectorAll('.quiz-box').forEach(box => {
-                    if (!box.classList.contains('quiz-final')) box.style.display = 'block';
+                    if (!box.classList.contains('quiz-final')) {
+                        box.style.display = 'block';
+                    }
                 });
+
                 loadQuizQuestion();
             }
-            
+
             window.scrollTo(0, 0);
         }
 
@@ -103,27 +112,52 @@
             }
         }
 
+        // ===== BIRTHDAY CAKE =====
         function blowCandle(index) {
             const candles = document.querySelectorAll('.candle');
+
+            if (!candles[index]) return;
+
             candles[index].classList.add('blown');
             candles[index].textContent = '💨';
             blownCandlesCount++;
 
-            if (blownCandlesCount === 5) {
+            if (blownCandlesCount >= 5) {
                 createConfetti();
-                document.getElementById('cake-message').style.display = 'block';
+
+                const message = document.getElementById('cake-message');
+                if (message) message.style.display = 'block';
             }
         }
 
+        // ===== LOVE LETTER =====
         function openEnvelope() {
             const envelope = document.getElementById('envelope');
-            if (envelope.textContent === '💌') {
+
+            if (envelope && envelope.textContent.trim() === '💌') {
                 envelope.classList.add('opened');
                 envelope.textContent = '📧';
-                document.getElementById('envelope-message').style.display = 'block';
+
+                const message = document.getElementById('envelope-message');
+                if (message) message.style.display = 'block';
+
                 createConfetti();
             }
         }
+
+        // ===== PHOTO GALLERY =====
+        const photos = [
+            { url: 'photo1.jpg', caption: 'Smile more, worry less 😊' },
+            { url: 'photo2.jpg', caption: "You're a sunflower 🌻" },
+            { url: 'photo3.jpg', caption: 'Keep shining ✨' },
+            { url: 'photo4.jpg', caption: 'Be yourself ❤️' },
+            { url: 'photo5.jpg', caption: 'You are beautiful 💕' },
+            { url: 'photo6.jpg', caption: 'My favorite memory with you 📸' },
+            { url: 'photo7.jpg', caption: "That day we couldn't stop laughing 😂" },
+            { url: 'photo8.jpg', caption: 'Always by my side 🤍' },
+            { url: 'photo9.jpg', caption: 'This one just feels like home 🏡' },
+            { url: 'photo10.jpg', caption: "Here's to many more like this 🥂" }
+        ];
 
         function nextPhoto() {
             photosIndex = (photosIndex + 1) % photos.length;
@@ -136,160 +170,212 @@
         }
 
         function updatePhoto() {
-            document.getElementById('photo-img').src = photos[photosIndex].url;
-            document.getElementById('photo-caption').textContent = photos[photosIndex].caption;
+            const image = document.getElementById('photo-img');
+            const caption = document.getElementById('photo-caption');
+
+            if (image) image.src = photos[photosIndex].url;
+            if (caption) caption.textContent = photos[photosIndex].caption;
         }
 
+        // ===== BACKGROUND MUSIC =====
         function toggleMusic() {
             const audio = document.getElementById('bgMusic');
-            isMusicPlaying = !isMusicPlaying;
             const btn = document.querySelector('.music-btn');
+
+            if (!audio || !btn) return;
+
+            isMusicPlaying = !isMusicPlaying;
+
             if (isMusicPlaying) {
-                audio.play().catch(() => {
-                    // Autoplay/file might be blocked or missing - that's okay
-                    console.log('Add your own background-music.mp3 file to enable music.');
+                audio.play().then(() => {
+                    btn.textContent = '🎵';
+                }).catch(() => {
+                    isMusicPlaying = false;
+                    btn.textContent = '🔇';
+                    console.log('Check that your background music file exists.');
                 });
-                btn.textContent = '🎵';
             } else {
                 audio.pause();
                 btn.textContent = '🔇';
             }
         }
 
-// ===== LOVE COUNTER ❤️ =====
-// Date your love story began (YYYY-MM-DD)
-const loveStartDate = '2026-09-08';
+        // ===== LOVE COUNTER ❤️ =====
+        // Change this date if your relationship started on a different date.
+        const loveStartDate = '2026-09-08';
 
-function updateLoveCounter() {
-    const start = new Date(loveStartDate + 'T00:00:00');
-    const now = new Date();
+        function updateLoveCounter() {
+            const ids = [
+                'countYears',
+                'countMonths',
+                'countDays',
+                'countTotalDays'
+            ];
 
-    // Calculate years, months, and days
-    let years = now.getFullYear() - start.getFullYear();
-    let months = now.getMonth() - start.getMonth();
-    let days = now.getDate() - start.getDate();
+            if (!ids.every(id => document.getElementById(id))) return;
 
-    if (days < 0) {
-        months--;
+            const start = new Date(loveStartDate + 'T00:00:00');
+            const now = new Date();
 
-        const lastMonth = new Date(
-            now.getFullYear(),
-            now.getMonth(),
-            0
-        );
+            if (Number.isNaN(start.getTime())) return;
 
-        days += lastMonth.getDate();
-    }
+            let years = now.getFullYear() - start.getFullYear();
+            let months = now.getMonth() - start.getMonth();
+            let days = now.getDate() - start.getDate();
 
-    if (months < 0) {
-        years--;
-        months += 12;
-    }
+            if (days < 0) {
+                months--;
+                days += new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    0
+                ).getDate();
+            }
 
-    // Calculate total days together
-    const totalDays = Math.max(
-        0,
-        Math.floor(
-            (new Date(now.getFullYear(), now.getMonth(), now.getDate()) -
-             start) / (1000 * 60 * 60 * 24)
-        )
-    );
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
 
-    // Update the HTML counter
-    document.getElementById('countYears').textContent =
-        Math.max(0, years);
+            const today = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate()
+            );
 
-    document.getElementById('countMonths').textContent =
-        Math.max(0, months);
+            const totalDays = Math.max(
+                0,
+                Math.floor((today - start) / 86400000)
+            );
 
-    document.getElementById('countDays').textContent =
-        Math.max(0, days);
+            document.getElementById('countYears').textContent =
+                Math.max(0, years);
 
-    document.getElementById('countTotalDays').textContent =
-        totalDays;
-}
+            document.getElementById('countMonths').textContent =
+                Math.max(0, months);
 
-// Update the counter immediately
-updateLoveCounter();
+            document.getElementById('countDays').textContent =
+                Math.max(0, days);
 
-// Refresh the counter every minute
-setInterval(updateLoveCounter, 60000);
+            document.getElementById('countTotalDays').textContent =
+                totalDays;
+        }
 
-        // ===== MEMORY QUIZ =====
-        // EDIT ME: replace these with real questions only she would know the answer to!
+        updateLoveCounter();
+        setInterval(updateLoveCounter, 60000);
+
+        // ===== MEMORY QUIZ 💕 =====
         const quizQuestions = [
             {
-                question: "Where did we first meet?",
-                options: ["School", "Through friends", "Online", "Game"],
+                question: 'Where did we first meet?',
+                options: ['School', 'Through friends', 'Online', 'Game'],
                 correct: 3
             },
             {
                 question: "What's our favorite thing to do together?",
-                options: ["Watch movies", "Long calls", "Travel", "Meri gand marna"],
+                options: ['Watch movies', 'Long calls', 'Travel', 'Meri gand marna'],
                 correct: 3
             },
             {
-                question: "What do I always tease you about?",
-                options: ["Being late", "Your laugh",  "Your playlist", "Your height"],
+                question: 'What do I always tease you about?',
+                options: ['Being late', 'Your laugh', 'Your playlist', 'Your height'],
                 correct: 3
             },
             {
-                question: "Who falls asleep first while VideoCall?",
-                options: ["Me", "You",  "Both of us", "We never stop talking"],
+                question: 'Who falls asleep first while VideoCall?',
+                options: ['Me', 'You', 'Both of us', 'We never stop talking'],
                 correct: 0
             },
-                {
-                question: "One last question, Gayuu… how special am I to you?",
-                options: ["A little special", "Very special",  "More than I can explain", "You already know, silly!"],
+            {
+                question: 'One last question, Gayuu… how special am I to you?',
+                options: [
+                    'A little special',
+                    'Very special',
+                    'More than I can explain',
+                    'You already know, silly!'
+                ],
                 correct: 3
             }
         ];
+
         let quizIndex = 0;
         let quizScore = 0;
         let quizAnswered = false;
 
         function loadQuizQuestion() {
             quizAnswered = false;
-            document.getElementById('quizFinal').style.display = 'none';
-            document.getElementById('quizFeedback').textContent = '';
+
+            const finalScreen = document.getElementById('quizFinal');
+            const feedback = document.getElementById('quizFeedback');
+
+            if (finalScreen) finalScreen.style.display = 'none';
+            if (feedback) feedback.textContent = '';
 
             if (quizIndex >= quizQuestions.length) {
-                document.querySelector('.quiz-box:not(.quiz-final)').style.display = 'none';
-                document.getElementById('quizFinal').style.display = 'block';
-                document.getElementById('quizScore').textContent = quizScore;
+                const quizBox = document.querySelector('.quiz-box:not(.quiz-final)');
+                if (quizBox) quizBox.style.display = 'none';
+                if (finalScreen) finalScreen.style.display = 'block';
+
+                const scoreLine = document.getElementById('quizScore');
+                if (scoreLine) {
+                    scoreLine.textContent = quizScore;
+                    const parent = scoreLine.parentElement;
+                    if (parent) {
+                        parent.innerHTML =
+                            `Score: <span id="quizScore">${quizScore}</span>/${quizQuestions.length}`;
+                    }
+                }
+
                 createConfetti();
                 return;
             }
 
             const q = quizQuestions[quizIndex];
-            document.getElementById('quizProgress').textContent = `Question ${quizIndex + 1} of ${quizQuestions.length}`;
-            document.getElementById('quizQuestion').textContent = q.question;
-
+            const progress = document.getElementById('quizProgress');
+            const question = document.getElementById('quizQuestion');
             const optionsDiv = document.getElementById('quizOptions');
+
+            if (progress) {
+                progress.textContent =
+                    `Question ${quizIndex + 1} of ${quizQuestions.length}`;
+            }
+
+            if (question) question.textContent = q.question;
+            if (!optionsDiv) return;
+
             optionsDiv.innerHTML = '';
-            q.options.forEach((opt, i) => {
+
+            q.options.forEach((option, i) => {
                 const btn = document.createElement('div');
                 btn.className = 'quiz-option';
-                btn.textContent = opt;
-                btn.onclick = () => selectQuizAnswer(i, btn);
+                btn.textContent = option;
+                btn.addEventListener('click', () => selectQuizAnswer(i, btn));
                 optionsDiv.appendChild(btn);
             });
         }
 
-        function selectQuizAnswer(i, el) {
+        function selectQuizAnswer(i, element) {
             if (quizAnswered) return;
-            quizAnswered = true;
-            const q = quizQuestions[quizIndex];
-            const allOptions = document.querySelectorAll('.quiz-option');
 
-            if (i === q.correct) {
-                el.classList.add('correct');
-                document.getElementById('quizFeedback').textContent = "Yes! You know it 💕";
+            quizAnswered = true;
+            const question = quizQuestions[quizIndex];
+            const allOptions = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quizFeedback');
+
+            if (i === question.correct) {
+                element.classList.add('correct');
+                if (feedback) feedback.textContent = 'Yes! You know it 💕';
                 quizScore++;
             } else {
-                el.classList.add('wrong');
-                allOptions[q.correct].classList.add('correct');
-                document.getElementById('quizFeedback').textContent = "Close! Here's the right one 😊";
+                element.classList.add('wrong');
+
+                if (allOptions[question.correct]) {
+                    allOptions[question.correct].classList.add('correct');
+                }
+
+                if (feedback) {
+                    feedback.textContent = "Close! Here's the right one 😊";
+                }
             }
 
             setTimeout(() => {
@@ -298,22 +384,29 @@ setInterval(updateLoveCounter, 60000);
             }, 1500);
         }
 
+        // ===== CONFETTI 🎉 =====
         function createConfetti() {
             const emojis = ['🎉', '🎊', '✨', '💕', '🌟', '💖', '🎈'];
+
             for (let i = 0; i < 60; i++) {
-                const conf = document.createElement('div');
-                conf.className = 'confetti';
-                conf.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                conf.style.left = Math.random() * 100 + '%';
-                conf.style.top = '-20px';
-                conf.style.fontSize = Math.random() * 20 + 15 + 'px';
-                document.body.appendChild(conf);
-                setTimeout(() => conf.remove(), 3000);
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.textContent =
+                    emojis[Math.floor(Math.random() * emojis.length)];
+
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-20px';
+                confetti.style.fontSize =
+                    Math.random() * 20 + 15 + 'px';
+
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
             }
         }
 
         function celebrate() {
             createConfetti();
+
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => createConfetti(), i * 500);
             }
