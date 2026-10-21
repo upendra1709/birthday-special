@@ -147,16 +147,16 @@
 
         // ===== PHOTO GALLERY =====
         const photos = [
-            { url: 'photo1.jpg', caption: 'Smile more, worry less 😊' },
-            { url: 'photo2.jpg', caption: "You're a sunflower 🌻" },
-            { url: 'photo3.jpg', caption: 'Keep shining ✨' },
-            { url: 'photo4.jpg', caption: 'Be yourself ❤️' },
-            { url: 'photo5.jpg', caption: 'You are beautiful 💕' },
-            { url: 'photo6.jpg', caption: 'My favorite memory with you 📸' },
-            { url: 'photo7.jpg', caption: "That day we couldn't stop laughing 😂" },
-            { url: 'photo8.jpg', caption: 'Always by my side 🤍' },
-            { url: 'photo9.jpg', caption: 'This one just feels like home 🏡' },
-            { url: 'photo10.jpg', caption: "Here's to many more like this 🥂" }
+            { url: 'photo1.jpeg', caption: 'Smile more, worry less 😊' },
+            { url: 'photo2.jpeg', caption: "You're a sunflower 🌻" },
+            { url: 'photo3.jpeg', caption: 'Keep shining ✨' },
+            { url: 'photo4.jpeg', caption: 'Be yourself ❤️' },
+            { url: 'photo5.jpeg', caption: 'You are beautiful 💕' },
+            { url: 'photo6.jpeg', caption: 'My favorite memory with you 📸' },
+            { url: 'photo7.jpeg', caption: "That day we couldn't stop laughing 😂" },
+            { url: 'photo8.jpeg', caption: 'Always by my side 🤍' },
+            { url: 'photo9.jpeg', caption: 'This one just feels like home 🏡' },
+            { url: 'photo10.jpeg', caption: "Here's to many more like this 🥂" }
         ];
 
         function nextPhoto() {
