@@ -547,27 +547,29 @@
             box-shadow: 0 15px 40px rgba(255, 182, 225, 0.2);
         }
 
-        .photo-display {
-            width: 100%;
-            aspect-ratio: 1;
-            background: linear-gradient(135deg, rgba(255, 182, 225, 0.2) 0%, rgba(230, 215, 240, 0.2) 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-            border: 3px solid rgba(255, 182, 225, 0.3);
-            position: relative;
-            box-shadow: inset 0 0 20px rgba(255, 182, 225, 0.1);
-        }
+       .photo-display {
+    width: 100%;
+    /* aspect-ratio: 1;   <- delete this line */
+    background: linear-gradient(135deg, rgba(255, 182, 225, 0.2) 0%, rgba(230, 215, 240, 0.2) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 3px solid rgba(255, 182, 225, 0.3);
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(255, 182, 225, 0.1);
+}
 
-        .photo-display img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            animation: photoZoom 0.8s ease-out;
-        }
+    .photo-display img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;        /* stops tall photos from pushing the buttons off screen */
+    object-fit: contain;     /* never crops */
+    display: block;
+    animation: photoZoom 0.8s ease-out;
+}
 
         @keyframes photoZoom {
             from { 
