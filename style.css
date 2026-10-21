@@ -1245,3 +1245,14 @@
             70% { transform: scale(1.05); opacity: 1; }
             100% { transform: scale(1); }
         }
+
+.cake.wish-cake {
+    width: min(320px, 80vw);
+    height: 40vh;                    /* adjust to make the photo area bigger or smaller */
+    background-size: contain;        /* shows the full photo, no cropping */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+}
