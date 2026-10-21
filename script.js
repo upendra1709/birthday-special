@@ -153,7 +153,7 @@
             { url: 'photo4.jpeg', caption: 'Be yourself ❤️' },
             { url: 'photo5.jpeg', caption: 'You are beautiful 💕' },
             { url: 'photo6.jpeg', caption: 'My favorite memory with you 📸' },
-            { url: 'photo7.jpeg', caption: "That day we couldn't stop laughing 😂" },
+            { url: 'photo7.jpeg', caption: "Some pictures get old, but the beauty in them never fades 💕" },
             { url: 'photo8.jpeg', caption: 'Always by my side 🤍' },
             { url: 'photo9.jpeg', caption: 'This one just feels like home 🏡' },
             { url: 'photo10.jpeg', caption: "Here's to many more like this 🥂" }
